@@ -36,7 +36,7 @@
     - CPU and GPU is connected through *PCIe* or *NVLINK*
 
 3. Thread Blocks and Grids
-    ### GPU Hierarchy 
+    **GPU Hierarchy**
     1. threads
     2. warps
     3. blocks
