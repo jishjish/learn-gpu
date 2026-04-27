@@ -1,0 +1,7 @@
+[project]
+name = "learn-gpu"
+version = "0.1.0"
+description = "Learning GPUs through NVIDIA documentation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
