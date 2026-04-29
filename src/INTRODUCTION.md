@@ -76,7 +76,26 @@
                 {a = q(t);}
             y = f(a);
         ```
+    - Thread blocks are best specified to have total number of threads divisible by 32 (warp count)
 
-
+4. GPU Memory
+    a. DRAM Memory in Heterogenous Systems
+        - Both CPU and GPU have directly attached DRAM chips
+        - DRAM attached to GPU == *global memory* (accessible to all SMs in the GPU)... CPU DRAM == *host memory*
+        - Both CPU/GPU use virtual memory addressing
+        - Unified memory allows the placement of memory to be handled automatically by CUDA runtime
+    b. On-Chip Memory in GPUs
+        - In addition to global memory each GPU has some on-chip memory 
+        - Each SM has its own register file (stores thread local variables)
+        - To schedule thread block to SM:
+            - total register * threads in block <= available registers
+        - Shared memory allocations are done at the block level
+    c. Caches
+        - In addition to programmable memories, GPUs have L1 and L2 caches
+        - Each SM has an L1 which is part of the unified data cache. A larger L2 is shared by all SMs in a GPU
+    d. Unified Memory
+        - When apps allocate memory explicitly on CPU/GPU, that memory is only accessible to code on that device
+            - CPU memory can only be accessed from CPU and GPU from the kernels on the GPU
+        - CUDA feature, **unified memory** allows for apps to make memory allocations across CPU and GPU
 
 
