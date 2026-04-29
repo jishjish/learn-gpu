@@ -53,3 +53,23 @@
             - The above launches a single thread block with 256 threads. Each thread will execute the exact same kernel code
             - Limit to number of threads per block as all threads reside in the same SM and must share resources
             - On current GPUs, a thread block may contain up to 1024 threads
+
+        - When using 2 or 3d grids or thread blocks, the CUDA type `dim3` is used as the grid and thread block dimension parameters
+        - Example of kernel launch of MatAdd on a 16x16 grid of thread blocks where each block is 8x8
+        ```
+        int main()
+        {
+            ...
+            dim3 grid(16,16);
+            dim3 block(8,8);
+            MatAdd<<<grid, block>>>(A, B, C);
+            ...
+        }
+        ```
+
+    c. Thread and Grid Index Intrinsics 
+        - In kernel code, CUDA provides intrinics to access params of the execution config and index of a thread or block
+            - **threadIdx** gives index of a thread within its thread block (each thread has a different index)
+            - **blockDim** gives the dimensions of the thread block, which is specified in execution configuration of the kernel launch
+            - **blockIdx** gives index of a thread block in the grid (each thread block has a different index)
+            - **gridDim** gives dimensions of the grid, which is specified in the execution configruation at kernel launch
