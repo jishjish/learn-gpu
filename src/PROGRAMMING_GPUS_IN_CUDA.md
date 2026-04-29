@@ -50,4 +50,6 @@
                 ...
             }
             ```
-            - The above launches a single thred block with 256 threads. Each thread will execute the exact same kernel code
+            - The above launches a single thread block with 256 threads. Each thread will execute the exact same kernel code
+            - Limit to number of threads per block as all threads reside in the same SM and must share resources
+            - On current GPUs, a thread block may contain up to 1024 threads
