@@ -60,11 +60,34 @@
             cudaMemcpy(dev_a, h_a, bytes, cudaMemcpyHostToDevice)
             cudaMemcpy(dev_b, h_b, bytes, cudaMemcpyHostToDevice)
             ```
-
+             _________________________________________________________
             | Conn. Type      | Kitchen Analogy     | Speed(Approx.)  |
             | --------------  | ------------------- | --------------- |
             | PCIe 4.0 Bus    | Highway to kitchen  | ~32 GB/s        | 
             | GPU Global Mem  | Fast walk to pantry | ~2,000 GB/s     | 
             | GPU Shared Mem  | Grab from workbench | ~19,000 GB/s    |
+             ---------------------------------------------------------
             
+            **KEY INSIGHT: A truly fast CUDA program minimizes data transfers**
+            **Send the data once, run many kernels, only copy final results back**
+        3. Launch the kernel
+            a. Tell the GPU to execute our kernel
+            ```
+            int threadsPerBlock = 256;
+            int blocksPerGrid = (size * threadsPerBlock - 1) / threadsPerBlock;
+
+            // Launch!
+            addKernel<<<blocksPerGrid, threadsPerBlock>>>(dev_c, dev_a, dev_b, size);
+            ```
+        4. Copy results from device (GPU) back to host (CPU)
+            a. Once GPU is finished, it sits on GPU memory until we copy it back
+            ```
+            cudaMemcpy(h_c, dev_c, bytes, cudaMemcpyDeviceToHost);
+            ```
+        5. Free GPU memory
+            ```
+            cudaFree(dev_a);
+            cudaFree(dev_b);
+            cudaFree(dev_c);
+            ```
 
