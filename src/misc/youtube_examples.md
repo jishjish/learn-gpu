@@ -38,7 +38,33 @@
         - the "project manager"
     - How each of the thousands of threads figures out its unique id:
         - int i = blockIdx.x * blockDim.x + threadIdx.x
-            - **blockIdx.x**   - 
-            - **blockDim.x**   - 
-            - **threadIdx.x**  -
+            - **blockIdx.x**   - "Which team (block) am i in?"
+            - **blockDim.x**   - "How many threads are in each team?"
+            - **threadIdx.x**  - "Whats my personal ID within my team?"
+        - For *Thread #12* in *Team 5*, with 256 threads per team... the unique global index..
+            - i = 5 * 256 + 12 = 1_292
+            - This thread now knows its one job to compute - c[1292]
+    - **Every CUDA kernel follows this 5 step Plan**
+        1. Allocate memory on the GPU 
+            a. CPU RAM and GPU VRAM are separate, you must explicitly allocate GPU memory
+            ```
+            int *dev_a, *dev_b, dev_c;
+            cudaMalloc(&dev_a, bytes);
+            cudaMalloc(&dev_b, bytes);
+            cudaMalloc(&dev_c, bytes);
+            ```
+        2. Copy data from host to device
+            a. Copy input arrays from CPU RAM to GPU memory we just allocated
+            b. Be cognizant - cudaMemcpy can KILL PERFORMANCE 
+            ```
+            cudaMemcpy(dev_a, h_a, bytes, cudaMemcpyHostToDevice)
+            cudaMemcpy(dev_b, h_b, bytes, cudaMemcpyHostToDevice)
+            ```
+
+            | Conn. Type      | Kitchen Analogy     | Speed(Approx.)  |
+            | --------------  | ------------------- | --------------- |
+            | PCIe 4.0 Bus    | Highway to kitchen  | ~32 GB/s        | 
+            | GPU Global Mem  | Fast walk to pantry | ~2,000 GB/s     | 
+            | GPU Shared Mem  | Grab from workbench | ~19,000 GB/s    |
+            
 
